@@ -41,6 +41,9 @@ webdriver-manager
 ```
 
 # 4) Jalankan test
+sebelum jalanjakan test pastikan virtual environment aktif, cara mengatahui sudah aktif adalah sudah ada ket. (venv) : 
+(venv) [USERS] ~/Documents/ALL_ABOUT_AUTOMATION/qa-automation-demo [main]> 
+
 Semua test:
 `pytest -v`
 
