@@ -42,11 +42,13 @@ webdriver-manager
 
 # 4) Jalankan test
 Semua test:
-`pytest -v
-`
+`pytest -v`
+
 Test spesifik:
-`pytest tests/test_login.py::test_login_success -v
-`
+`pytest tests/test_login.py::test_login_success -v`
+
+Generate HTML report:
+`pytest -v --html=reports/login-report.html --self-contained-html`
 
 Buka report:
 - macOS: open reports/login-report.html
