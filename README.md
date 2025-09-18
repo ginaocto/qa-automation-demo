@@ -53,13 +53,5 @@ Buka report:
 - Linux: xdg-open reports/login-report.html
 - Windows: start reports\login-report.html
 
-qa-automation-demo/
-├── conftest.py              # pytest fixture untuk browser
-├── requirements.txt
-├── setup.sh                 # script otomatis setup + run test
-├── pages/
-│   └── login_page.py        # Page Object Model (POM)
-├── tests/
-│   └── test_login.py        # test cases
-└── reports/
-    └── login-report.html    # hasil test report
+<img width="797" height="356" alt="image" src="https://github.com/user-attachments/assets/3c8ae385-8829-4cee-b6e7-8defec1b55a5" />
+
