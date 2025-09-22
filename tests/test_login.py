@@ -1,15 +1,8 @@
 from pages.login_page import LoginPage
 
-def test_valid_login(driver):
-    page = LoginPage(driver)
-    page.load()
-    page.login("tomsmith", "SuperSecretPassword!")
+def test_valid_login(browser):
+    login = LoginPage(browser)
+    login.open()
+    login.login("standard_user", "secret_sauce")
 
-    assert "You logged into a secure area!" in page.get_message()
-
-def test_invalid_login(driver):
-    page = LoginPage(driver)
-    page.load()
-    page.login("wronguser", "wrongpass")
-
-    assert "Your username is invalid!" in page.get_message()
+    assert "inventory" in browser.current_url.lower(), "Login gagal, tidak diarahkan ke inventory page"

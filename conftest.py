@@ -1,46 +1,38 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2706
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+import pytest
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 
-\f0\fs24 \cf0 import pytest\
-from selenium import webdriver\
-from selenium.webdriver.chrome.service import Service\
-from webdriver_manager.chrome import ChromeDriverManager\
-from selenium.webdriver.chrome.options import Options\
-import os\
-\
-@pytest.fixture\
-def driver(request):\
-    options = Options()\
-    options.add_argument("--headless")  # hapus baris ini kalau mau lihat browser terbuka\
-    options.add_argument("--no-sandbox")\
-    options.add_argument("--disable-dev-shm-usage")\
-\
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)\
-    driver.implicitly_wait(5)\
-\
-    yield driver\
-\
-    # screenshot akhir setiap test\
-    test_name = request.node.name\
-    reports_dir = "reports/screenshots"\
-    os.makedirs(reports_dir, exist_ok=True)\
-    driver.save_screenshot(f"\{reports_dir\}/\{test_name\}.png")\
-    driver.quit()\
-\
-\
-# Screenshot tambahan kalau test gagal\
-@pytest.hookimpl(hookwrapper=True)\
-def pytest_runtest_makereport(item, call):\
-    outcome = yield\
-    rep = outcome.get_result()\
-    if rep.when == "call" and rep.failed:\
-        driver = item.funcargs.get("driver", None)\
-        if driver:\
-            reports_dir = "reports/screenshots"\
-            os.makedirs(reports_dir, exist_ok=True)\
-            driver.save_screenshot(f"\{reports_dir\}/\{item.name\}_FAILED.png")\
-}
+@pytest.fixture
+def browser():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--disable-infobars")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-popup-blocking")
+    options.add_argument("--disable-save-password-bubble")
+    options.add_experimental_option("prefs", {
+        "credentials_enable_service": False,
+        "profile.password_manager_enabled": False
+    })
+
+    driver = webdriver.Chrome(options=options)
+    driver.maximize_window()
+    yield driver
+    driver.quit()
+
+
+def close_password_popup_if_any(driver):
+    """
+    Helper untuk menutup popup Google Password Manager
+    kalau muncul setelah login.
+    """
+    try:
+        popup_ok = WebDriverWait(driver, 2).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[text()='OK']"))
+        )
+        popup_ok.click()
+        print("✅ Popup password manager tertutup.")
+    except TimeoutException:
+        print("ℹ️ Tidak ada popup password manager.")

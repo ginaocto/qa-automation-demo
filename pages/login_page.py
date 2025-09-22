@@ -1,20 +1,20 @@
 from selenium.webdriver.common.by import By
+import time
 
 class LoginPage:
     def __init__(self, driver):
         self.driver = driver
-        self.username_input = (By.ID, "username")
+        self.username_input = (By.ID, "user-name")
         self.password_input = (By.ID, "password")
-        self.login_button = (By.CSS_SELECTOR, "button.radius")
-        self.flash_message = (By.ID, "flash")
+        self.login_button = (By.ID, "login-button")
 
-    def load(self):
-        self.driver.get("https://the-internet.herokuapp.com/login")
+    def open(self):
+        self.driver.get("https://www.saucedemo.com/")
 
     def login(self, username, password):
         self.driver.find_element(*self.username_input).send_keys(username)
+        time.sleep(1)
         self.driver.find_element(*self.password_input).send_keys(password)
+        time.sleep(1)
         self.driver.find_element(*self.login_button).click()
-
-    def get_message(self):
-        return self.driver.find_element(*self.flash_message).text
+        time.sleep(2)
