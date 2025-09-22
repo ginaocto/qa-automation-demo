@@ -1,8 +1,8 @@
 from pages.login_page import LoginPage
 
-def test_valid_login(browser):
-    login = LoginPage(browser)
-    login.open()
-    login.login("standard_user", "secret_sauce")
+def test_login(browser):
+    login_page = LoginPage(browser)
+    login_page.login("standard_user", "secret_sauce")
 
-    assert "inventory" in browser.current_url.lower(), "Login gagal, tidak diarahkan ke inventory page"
+    # Screenshot hasil login
+    browser.save_screenshot("reports/after_login.png")

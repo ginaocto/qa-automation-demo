@@ -1,20 +1,18 @@
 from selenium.webdriver.common.by import By
-import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class LoginPage:
-    def __init__(self, driver):
-        self.driver = driver
-        self.username_input = (By.ID, "user-name")
-        self.password_input = (By.ID, "password")
-        self.login_button = (By.ID, "login-button")
-
-    def open(self):
-        self.driver.get("https://www.saucedemo.com/")
+    def __init__(self, browser):
+        self.browser = browser
+        self.wait = WebDriverWait(browser, 10)
 
     def login(self, username, password):
-        self.driver.find_element(*self.username_input).send_keys(username)
-        time.sleep(1)
-        self.driver.find_element(*self.password_input).send_keys(password)
-        time.sleep(1)
-        self.driver.find_element(*self.login_button).click()
-        time.sleep(2)
+        self.browser.get("https://www.saucedemo.com/")
+
+        self.wait.until(EC.visibility_of_element_located((By.ID, "user-name"))).send_keys(username)
+        self.browser.find_element(By.ID, "password").send_keys(password)
+        self.browser.find_element(By.ID, "login-button").click()
+
+        # Tunggu sampai halaman inventory terbuka
+        self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, "inventory_list")))
